@@ -1,0 +1,25 @@
+BNF
+Simioniuc Ruxandra - 1306B
+<Litera> ::= "S" | "R" | "B" | "i" | "m" | "o" | "n" | "u" | "c" | "x" | "a" | "d" | "r"
+<Cifra> ::= "0" | "1" | "3" | "6"
+<Nume> ::= <Litera> | <Litera> <Nume>
+<Grupa> ::= <Cifra> <Cifra> <Cifra> <Cifra> <Litera>
+<Expresie> ::= <Nume> " " <Nume> " - " <Grupa> 
+
+
+EBNF
+
+Litera = "S" | "R" | "B" | "i" | "m" | "o" | "n" | "u" | "c" | "x" | "a" | "d" | "r";
+Cifra = "0" | "1" | "3" | "6" ;
+Nume = Litera, {Litera} ;
+Grupa = Cifra, Cifra, Cifra, Cifra, Litera ;
+Expresie = Nume, " ", Nume, " - ", Grupa ;
+
+
+
+ABNF
+Litera = "S" / "R" / "B" / "i" / "m" / "o" / "n" / "u" / "c" / "x" / "a" / "d" / "r"
+Cifra = "0" / "1" / "3" / "6"
+Nume = Litera / Litera.Cuvant
+Grupa = Cifra.Cifra.Cifra.Cifra.Litera
+Expresie = Nume." ".Nume." - ".Grupa
