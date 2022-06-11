@@ -1,0 +1,200 @@
+L1 Limbaje si translatoare
+**************************
+**************************
+**************************
+L - limbaj: set bine definit de simboluri, expresii, reguli care permit transmiterea de informatii
+T - translator: sistem/program de conversie a unor elemente dintr-un limbaj in alt limbaj
+    translarea: conversia unor date codate in alte formate
+L - lexicul: multimea atomilor(litere, cifre, tokeni etc)
+S - sintaxa: reguli de combinare a simbolurilor lexicale
+  - semantica: sensul/intelesul unor combinatii sintactico-lexicale
+  - semiotica = SIntaxa + Semantica + Pragmatica
+  
+
+**************************
+**************************
+**************************
+L2 Componente si descrieri
+**************************
+**************************
+**************************
+Gruparea elementelor de mai sus in categorii(in functie de rol) te ajuta sa descrii limbajul mai usor
+Componentele limbajelor apartin uneia sau mai multor categorii:
+	- caractere speciale
+	- separatori
+	- comentarii
+	- cuvinte rezervate
+	- cuvinte cheie
+	- identificatori
+	- literali
+	- operatori
+	- expresii
+	- instructiuni
+
+BNF
+<Simbol> 
+::= definirea unei productii
+| sau
+"simboluri lexicale/terminale"
+
+EBNF
+. sau ; la final de productie
+= defineste productia
+| sau
+[] definitii optionale
+{} repetitii
+N*E multiplicare
+() grupare
+"" sau '' pentru terminale
+(* *) comentariu
+, operator concatenare
+
+ABNF
+<> delimitare optionala nume reguli
+= definitie
+; comentariu
+. concatenare
+/ sau
+=/ adaugare reguli alternative(sau egal)
+N*R multiplicare reguli
+() reguli grupate
+[] optional
+
+
+
+simboluri - atomii
+literali  - cuvinte rezervate(int, float, string etc) si tot ce poate aparea in dreapta egalului
+expresii  - entitate care poate fi evaluata ca sa-i determini valoarea
+fraze	  - combinatii lexicale cu anumite semnificatii (if then else)
+Metode	  - mai multe expresii, sectiuni de cod/proceduri, functii
+Structura - colectie de date
+
+
+
+
+
+
+
+Grafuri
+Tupla G=(V,E)
+V - multime noduri(vertex)
+E - multime muchii(edges)
+Poate fi:
+	- ordonat/neordonat
+	- ponderat(fiecare muchie are o anumita greutate wij)
+	- conex daca intre oricare 2 noduri exista un drum
+() pereche ordonata
+{} pereche neordonata
+La neorientat pui linii drepte, la orientat cu sageti
+					(daca ai din 1 in 2 si din 2 in 1 pui cu <-->)
+Graf complementar(pui muchii intre nodurile care n-au si le scoti pe cele existente)
+Reuniunea(unirea a doua grafuri distincte)
+produs cartezian
+DFS(cu stiva), BFS(cu coada), Dijkstra si Floyd-Warshall
+
+
+
+
+Gramatici 
+G = { N, E, P, S} 
+N 		= alfabetul simbolurilor neterminale {A,B,C,S}
+E(sigma)= alfabetul simbolurilor terminale
+A|		= N reunit cu E alfabetul gramaticii
+lambda sau epsilon mic (empty string)
+S		= simbol de start
+E*		= toate combinatiile simbolurilor terminale
+P 		= multimea productiilor {alfa -> beta | alfa, beta din A|}
+alfa => beta regula de derivare generala
+L(G)	= limbajul generat de gramatica G si se noteaza {x| S=>x}
+
+
+Tip 3 (regulata, liniara)
+A -> a sau A -> Ba
+In stanga sagetii ai un singur neterminal
+In dreapta sagetii ai
+	- OBLIGATORIU un singur simbol terminal
+	- OPTIONAL un simbol neterminal(max 1)
+	
+		N		 E					P				   S
+G = ({S,A,B}, {a, b}, {S->aA, A->aA|bB, B->bB|lambda}, S)
+S->aA
+A->aA
+A->bB
+B->bB
+B->lambda
+
+L(G) = {a^n b^m | m,n >= 1}
+
+
+
+
+Tip 2 (independenta de context)
+A -> Y
+In stanga sagetii un singur simbol neterminal
+In dreapta sagetii orice
+
+	  N		 E			P	   S
+G = ({S}, {a, b}, {S->aSb|ab}, S)
+S->aSb 		
+S->ab		
+
+L(G) = {a^n b^n | n >= 1}
+
+
+
+Tip 1 (dependente de context)
+aAb -> aYb
+A se transofrma daca are a si b langa (a si b pot fi vide)
+
+		  N			E											P					  S
+G = ({A,B,C,D,E},{a,b,c}, {A->aAB|abC, CB->DB, DB->DE,DE->BE, BE->BC, bB->bbc, C->c}, A)
+A->aAB
+A->abC
+CB->DB
+DB->DE
+DE->BE
+BE->BC
+bB->bbC
+C->c
+
+abc
+A->aAB->aab(CB)->aa(bB)C->aabbcC->aabbcc
+A->aAB->aaABB->aaab(CB)B->aaabBCB->aaabBBC->aaabbCBC->aaabbBCC->
+aaabbbcCC->aaabbbccc
+
+L(G) = {a^n b^n c^n | n >= 1}
+
+Tip 0 (cand nu e niciuna de mai sus)
+		N		 E					P				   S
+G = ({A, B}, {a, b, c}, {A->aAB|abc, bB->bbc, cB->Bc}, A)
+A->aAB
+A->abc
+bB->bbc
+cB->Bc
+
+
+A->abc
+A->aAB->aab(cB)->aa(bB)c->aabbcc
+A->aAB->aaABB->aaab(cB)B->aaa(bB)(cB)->aaabb(cB)c->aaab(bB)cc->aaabbbccc
+
+L(G) = {a^n b^n c^n | n >= 1} = {abc, aabbcc, aaabbbccc....}
+
+
+
+
+
+Automate
+A = (Q, E, O, q0, F)   ( O e delta mic)
+Q = multimea starilor
+E = alfabet intrare
+O:QxE -> Q  functia de tranzitie
+q0 din Q e starea initiala
+F inclus in Q multimea starilor finale
+
+Poate fi:
+	-determinist daca O e functie univoca(ai tranzitii unice)
+	-nedeterminist
+E finit daca are nr finit de stari
+L(A) - limbajul acceptat = {w | w din E*, O(q0, w) apartine F}
+Doua automate is echivalente daca accepta acelasi limbaj
+
